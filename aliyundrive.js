@@ -6,7 +6,7 @@
  */
 
 const updateAccesssTokenURL = "https://auth.aliyundrive.com/v2/account/token"
-const signinURL = "https://member.aliyundrive.com/v1/activity/sign_in_list"
+const signinURL = "https://member.aliyundrive.com/v2/activity/sign_in_info"
 const axios = require('axios')
 const log4js = require('log4js');
 const logger = log4js.getLogger();
@@ -32,7 +32,6 @@ let alirefreshToeknArry = process.env.alirefreshToeknArry;
     }
     alirefreshToeknArry = alirefreshToeknArry.split(' ');
     for (let elem of alirefreshToeknArry) {
-        console.log()
         const queryBody = {
             "grant_type": 'refresh_token',
             "refresh_token": elem
