@@ -44,12 +44,10 @@ const doTask = async (cloudClient) => {
   result.push(
     `${res1.isSign ? "已经签到过了，" : ""}签到获得${res1.netdiskBonus}M空间`
   );
-  await delay(5000); // 延迟5秒
 
   const res2 = await cloudClient.taskSign();
   buildTaskResult(res2, result);
 
-  await delay(5000); // 延迟5秒
   const res3 = await cloudClient.taskPhoto();
   buildTaskResult(res3, result);
 
@@ -74,6 +72,31 @@ const doFamilyTask = async (cloudClient) => {
   return result;
 };
 
+const pushTelegramBot = (title, desp) => {
+  if (!(telegramBotToken && telegramBotId)) {
+    return;
+  }
+  const data = {
+    chat_id: telegramBotId,
+    text: `${title}\n\n${desp}`,
+  };
+  superagent
+    .post(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`)
+    .send(data)
+    .timeout(3000)
+    .end((err, res) => {
+      if (err) {
+        logger.error(`TelegramBot推送失败:${JSON.stringify(err)}`);
+        return;
+      }
+      const json = JSON.parse(res.text);
+      if (!json.ok) {
+        logger.error(`TelegramBot推送失败:${JSON.stringify(json)}`);
+      } else {
+        logger.info("TelegramBot推送成功");
+      }
+    });
+};
 
 const pushWxPusher = (title, desp) => {
   if (!(WX_PUSHER_APP_TOKEN && WX_PUSHER_UID)) {
@@ -89,6 +112,7 @@ const pushWxPusher = (title, desp) => {
   superagent
     .post("https://wxpusher.zjiecode.com/api/send/message")
     .send(data)
+    .timeout(3000)
     .end((err, res) => {
       if (err) {
         logger.error(`wxPusher推送失败:${JSON.stringify(err)}`);
@@ -104,13 +128,18 @@ const pushWxPusher = (title, desp) => {
 };
 
 const push = (title, desp) => {
-  pushWxPusher(title, desp);
-};
+  pushWxPusher(title, desp)
+  pushTelegramBot(title,desp)
+}
 
 const env = require("./env");
 let accounts = env.tyys
+
 let WX_PUSHER_UID = env.WX_PUSHER_UID
 let WX_PUSHER_APP_TOKEN = env.WX_PUSHER_APP_TOKEN
+
+let telegramBotToken = env.TELEGRAM_BOT_TOKEN
+let telegramBotId = env.TELEGRAM_CHAT_ID
 
 // 开始执行程序
 async function main() {
