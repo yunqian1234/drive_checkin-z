@@ -140,7 +140,7 @@ async function main() {
         await cloudClient.login();
         const result = await doTask(cloudClient);
         result.forEach((r) => logger.log(r));
-        logger.log("任务执行完毕");
+        
         const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
         logger.log(
           `个人总容量：${(
@@ -155,6 +155,7 @@ async function main() {
             1024
           ).toFixed(2)}G`
         );
+        console.log("");
       } catch (e) {
         logger.error(e);
         if (e.code === "ETIMEDOUT") {
