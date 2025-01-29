@@ -26,37 +26,19 @@ const { CloudClient } = require("cloud189-sdk");
 
 const mask = (s, start, end) => s.split("").fill("*", start, end).join("");
 
-const buildTaskResult = (res, result) => {
-  const index = result.length;
-  if (res.errorCode === "User_Not_Chance") {
-    result.push(`第${index}次抽奖失败,次数不足`);
-  } else {
-    result.push(`第${index}次抽奖成功,抽奖获得${res.prizeName}`);
-  }
-};
-
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// 任务 1.签到 2.天天抽红包 3.自动备份抽红包
+// 任务 
 const doTask = async (cloudClient) => {
   const result = [];
+  // 普通签到
   const res1 = await cloudClient.userSign();
   result.push(
     `${res1.isSign ? "已经签到过了，" : ""}签到获得${res1.netdiskBonus}M空间`
   );
-
-  const res2 = await cloudClient.taskSign();
-  buildTaskResult(res2, result);
-
-  const res3 = await cloudClient.taskPhoto();
-  buildTaskResult(res3, result);
-
-  return result;
-};
-
-const doFamilyTask = async (cloudClient) => {
+  
+  // 家庭云签到
   const { familyInfoResp } = await cloudClient.getFamilyList();
-  const result = [];
   if (familyInfoResp) {
     for (let index = 0; index < familyInfoResp.length; index += 1) {
       const { familyId } = familyInfoResp[index];
@@ -69,8 +51,10 @@ const doFamilyTask = async (cloudClient) => {
       );
     }
   }
+
   return result;
 };
+
 
 const pushTelegramBot = (title, desp) => {
   if (!(telegramBotToken && telegramBotId)) {
@@ -156,11 +140,8 @@ async function main() {
         await cloudClient.login();
         const result = await doTask(cloudClient);
         result.forEach((r) => logger.log(r));
-        const familyResult = await doFamilyTask(cloudClient);
-        familyResult.forEach((r) => logger.log(r));
         logger.log("任务执行完毕");
-        const { cloudCapacityInfo, familyCapacityInfo } =
-          await cloudClient.getUserSizeInfo();
+        const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
         logger.log(
           `个人总容量：${(
             cloudCapacityInfo.totalSize /
