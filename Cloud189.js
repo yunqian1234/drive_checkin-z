@@ -40,7 +40,7 @@ const doTask = async (cloudClient) => {
   // 家庭云签到
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
-    for (let index = 0; index < familyInfoResp.length; index += 1) {
+    for (let index = 0; index < 1; index += 1) {
       const { familyId } = familyInfoResp[index];
       const res = await cloudClient.familyUserSign(familyId);
       result.push(
@@ -163,6 +163,7 @@ async function main() {
         }
       } finally {
         logger.log(`账户 ${userNameInfo}执行完毕`);
+        logger.log("");
       }
     }
   }
