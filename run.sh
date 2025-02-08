@@ -6,5 +6,9 @@ cd $(dirname $0)
 export tyys=""
 export tyy_family_id=""
 
+export TELEGRAM_CHAT_ID=""
+export TELEGRAM_BOT_TOKEN=""
+export WX_PUSHER_APP_TOKEN=""
+export WX_PUSHER_UID=""
 echo > run.log
 npm run start | tee -a run.log
