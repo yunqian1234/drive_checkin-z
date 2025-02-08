@@ -32,7 +32,8 @@ jobs:
             
         - name: 操作
           run: |  
-              export tyys="${{ secrets.RCK }}"
+              export tyys="${{ secrets.tyys }}"
+              export tyy_family_id="${{ secrets.tyy_family_id }}"
               npm install
               npm start
               
