@@ -5,9 +5,9 @@
 ```linux
 git clone https://github.com/zhlhlf/drive_checkin --depth=1
 
-cd Cloud189Checkin && npm install
+cd drive_checkin && npm install
 export tyys="userphone1 password1 userphone2 password2"
-export alirefreshToeknArry="refresh_token1 refresh_token2"
+export tyy_family_id=""
 npm run start
 ```
 
