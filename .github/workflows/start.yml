@@ -1,0 +1,38 @@
+
+name: Action
+
+on:
+  workflow_dispatch:
+
+    inputs:
+      shell:
+        description: 'shell'
+        required: true
+        default: 'ls ; '
+
+
+jobs:
+    build:
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: 更改交换空间并link构建空间
+          uses: zhlhlf/maximize-build-space@master
+          with:
+            swap-size-mb: 8192
+            
+        - name: 获取本仓库源码
+          uses: actions/checkout@main
+          
+        - uses: actions/checkout@main
+        - name: Setup Node.js environment
+          uses: actions/setup-node@main
+          with:
+            node-version: 18
+            
+        - name: 操作
+          run: |  
+              export tyys="${{ secrets.RCK }}"
+              npm install
+              npm start
+              
