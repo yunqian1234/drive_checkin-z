@@ -2,13 +2,11 @@
 name: Action
 
 on:
+  watch:
+    types: started
   workflow_dispatch:
-
-    inputs:
-      shell:
-        description: 'shell'
-        required: true
-        default: 'ls ; '
+  schedule:
+    - cron: 20 8 * * *
 
 
 jobs:
@@ -34,6 +32,6 @@ jobs:
           run: |  
               export tyys="${{ secrets.tyys }}"
               export tyy_family_id="${{ secrets.tyy_family_id }}"
-              npm install
+              npm install >/dev/null 2>&1
               npm start
               

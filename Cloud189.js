@@ -25,10 +25,8 @@ const doTask = async (cloudClient, familyID) => {
 
   for (let i = 0; i < threadx; i++) {
     signPromises1.push((async () => {
-      let getSpace = 0;
       const res1 = await cloudClient.userSign();
-      if (!res1.isSign) getSpace = res1.netdiskBonus;
-      result.push(`获得${getSpace}M空间`);
+      if (!res1.isSign) result.push(`个人签到获得${res1.netdiskBonus}M空间`);
     })());
   }
 
@@ -40,10 +38,8 @@ const doTask = async (cloudClient, familyID) => {
     const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
     for (let i = 0; i < threadx; i++) {
       signPromises2.push((async () => {
-        let getSpace = 0;
         const res = await cloudClient.familyUserSign(family.familyId);
-        if (!res.signStatus) getSpace = res.bonusSpace;
-        result.push(`家庭云ID: ${res.signFamilyId} 获得${getSpace}M空间`);
+        if (!res.signStatus) result.push(`家庭云ID: ${res.signFamilyId} 获得${res.bonusSpace}M空间`);
       })());
     }
     await Promise.all(signPromises2);
