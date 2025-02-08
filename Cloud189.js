@@ -137,8 +137,8 @@ const main = async () => {
     //tasks.push((async () => {
       try {
         const cloudClient = new CloudClient(userName, password);
-        await cloudClient.login();
         logger.log(`${i / 2 + 1}-账户 ${userNameInfo} 开始执行`);
+        await cloudClient.login();
         const { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
 
         const result = await doTask(cloudClient, env.FAMILY_ID);
