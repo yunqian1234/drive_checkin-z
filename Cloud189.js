@@ -168,19 +168,16 @@ const main = async () => {
   }
 
   //await Promise.all(tasks);
-  const { familyCapacityInfo: familyCapacityInfo0 } = await firstcloudClient.getUserSizeInfo();
         
   if (env.FAMILY_ID) {
-    const { familyCapacityInfo: familyCapacityInfo0 } = await firstcloudClient.getUserSizeInfo();
+    const { familyCapacityInfo: finalfamilyCapacityInfo } = await firstcloudClient.getUserSizeInfo();
 
     logger.log(`初始家庭云容量：${familyCapacitySize / 1024 / 1024}M`);
-    logger.log(`最终家庭云容量：${familyCapacityInfo0.totalSize / 1024 / 1024}M`);
-    const capacityChange = familyCapacityInfo0.totalSize - familyCapacitySize;
+    logger.log(`最终家庭云容量：${finalfamilyCapacityInfo.totalSize / 1024 / 1024}M`);
+    const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
     logger.log(`容量变化：${capacityChange / 1024 / 1024}M`);
   }
 };
-
-let family_all = 0.0;
 
 (async () => {
   try {
