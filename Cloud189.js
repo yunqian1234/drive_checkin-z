@@ -22,29 +22,31 @@ const doTask = async (cloudClient, familyID) => {
   const result = [];
   const signPromises1 = [];
 
-
+  let getSpace = "签到个人云获得";
   for (let i = 0; i < threadx; i++) {
     signPromises1.push((async () => {
       const res1 = await cloudClient.userSign();
-      if (!res1.isSign) result.push(`个人签到获得${res1.netdiskBonus}M空间`);
+      if (!res1.isSign) getSpace+=` ${res1.netdiskBonus}`;
     })());
   }
-
+  result.push(getSpace);
   await Promise.all(signPromises1);
 
   const signPromises2 = [];
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
+    result.push(`签到家庭云 ID: ${family.familyId}`);
+    let getSpace = "获得";
     for (let i = 0; i < threadx; i++) {
       signPromises2.push((async () => {
         const res = await cloudClient.familyUserSign(family.familyId);
-        if (!res.signStatus) result.push(`家庭云ID: ${res.signFamilyId} 获得${res.bonusSpace}M空间`);
+        if (!res.signStatus) getSpace+=` ${res.bonusSpace}`;
       })());
     }
+    result.push(getSpace);
     await Promise.all(signPromises2);
   }
-
   return result;
 };
 
@@ -123,21 +125,29 @@ let threadx = env.threadx; //进程数
 const main = async () => {
   accounts = accounts.split(/[\n ]/);
 
+  let firstcloudClient, cloudCapacitySize, familyCapacitySize;
+
   for (let i = 0; i < accounts.length; i += 2) {
     const [userName, password] = accounts.slice(i, i + 2);
     if (!userName || !password) continue;
 
     const userNameInfo = mask(userName, 3, 7);
-
+    
     //const tasks = [];
     //tasks.push((async () => {
       try {
         const cloudClient = new CloudClient(userName, password);
-        logger.log(`${i / 2 + 1}-账户 ${userNameInfo} 开始执行`);
+
+
+        logger.log(`${i / 2 + 1}.账户 ${userNameInfo} 开始执行`);
         await cloudClient.login();
         const { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
-
         const result = await doTask(cloudClient, env.FAMILY_ID);
+        if(i == 0){
+          firstcloudClient = cloudClient;
+          cloudCapacitySize = cloudCapacityInfo0.totalSize;
+          familyCapacitySize = familyCapacityInfo0.totalSize;
+        }
         const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
         result.forEach((r) => logger.log(r));
 
@@ -151,16 +161,17 @@ const main = async () => {
         logger.error(e);
         if (e.code === "ETIMEDOUT") throw e;
       } finally {
-        logger.log(`${i / 2 + 1}-账户 ${userNameInfo} 执行完毕`);
+        logger.log(`账户 ${userNameInfo} 执行完毕`);
         logger.log("");
       }
     //})());
   }
 
   //await Promise.all(tasks);
-
+  const { familyCapacityInfo: familyCapacityInfo0 } = await firstcloudClient.getUserSizeInfo();
+        
   if (env.FAMILY_ID) {
-    logger.log(`指定家庭云ID ${env.FAMILY_ID} 获得 ${family_all}M`);
+    logger.log(`指定家庭云ID ${env.FAMILY_ID} 获得 ${familyCapacityInfo0.totalSize - familyCapacitySize}M`);
   }
 };
 
