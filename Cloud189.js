@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 require("dotenv").config();
 const log4js = require("log4js");
 const recording = require("log4js/lib/appenders/recording");
@@ -8,7 +7,10 @@ const { CloudClient } = require("cloud189-sdk");
 log4js.configure({
   appenders: {
     vcr: { type: "recording" },
-    out: { type: "console" },
+    out: { 
+          type: "console", 
+          layout: { type: "pattern", pattern: "%d{yyyy-MM-dd hh:mm:ss} - %m" }
+         },
   },
   categories: { default: { appenders: ["vcr", "out"], level: "info" } },
 });
