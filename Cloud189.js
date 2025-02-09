@@ -171,7 +171,12 @@ const main = async () => {
   const { familyCapacityInfo: familyCapacityInfo0 } = await firstcloudClient.getUserSizeInfo();
         
   if (env.FAMILY_ID) {
-    logger.log(`指定家庭云ID ${env.FAMILY_ID} 获得 ${familyCapacityInfo0.totalSize - familyCapacitySize}M`);
+    const { familyCapacityInfo: familyCapacityInfo0 } = await firstcloudClient.getUserSizeInfo();
+
+    logger.log(`初始家庭云容量：${familyCapacitySize / 1024 / 1024}M`);
+    logger.log(`最终家庭云容量：${familyCapacityInfo0.totalSize / 1024 / 1024}M`);
+    const capacityChange = familyCapacityInfo0.totalSize - familyCapacitySize;
+    logger.log(`容量变化：${capacityChange / 1024 / 1024}M`);
   }
 };
 
