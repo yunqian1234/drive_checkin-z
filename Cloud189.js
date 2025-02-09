@@ -25,8 +25,14 @@ const doTask = async (cloudClient, familyID) => {
   let getSpace = "签到个人云获得";
   for (let i = 0; i < threadx; i++) {
     signPromises1.push((async () => {
-      const res1 = await cloudClient.userSign();
-      if (!res1.isSign) getSpace+=` ${res1.netdiskBonus}M`;
+      try {
+        const res1 = await cloudClient.userSign();
+        if (!res1.isSign) {
+          getSpace += ` ${res1.netdiskBonus}M`;
+        }
+      } catch (e) {
+        getSpace += `\n ❌0MB (原因: ${e.message})`;
+      }
     })());
   }
   if(getSpace === "签到个人云获得") getSpace+=" 0M";
@@ -38,12 +44,18 @@ const doTask = async (cloudClient, familyID) => {
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
-    result.push(`签到家庭云 ID: ${family.familyId}`);
+    result.push(`开始签到家庭云 ID: ${family.familyId}`);
     let getSpace = "获得";
     for (let i = 0; i < threadx; i++) {
       signPromises2.push((async () => {
-        const res = await cloudClient.familyUserSign(family.familyId);
-        if (!res.signStatus) getSpace+=` ${res.bonusSpace}M`;
+        try {
+          const res = await cloudClient.familyUserSign(family.familyId);
+          if (!res.signStatus) {
+            getSpace += ` ✅${res.bonusSpace}M`;
+          }
+        } catch (e) {
+          getSpace += `\n ❌0MB (原因: ${e.message})`;
+        }
       })());
     }
     if(getSpace === "获得") getSpace+=" 0M";
