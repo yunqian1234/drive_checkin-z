@@ -21,25 +21,25 @@ const doTask = async (cloudClient, familyID) => {
   const result = [];
   const signPromises1 = [];
 
-  let getSpace = ["签到个人云获得"];
+  let getSpace = ["签到个人云获得(M)"];
   for (let i = 0; i < threadx; i++) {
     signPromises1.push((async () => {
       try {
         const res1 = await cloudClient.userSign();
         if (!res1.isSign) {
-          getSpace.push(` ✅${res1.netdiskBonus}M`);
+          getSpace.push(` ${res1.netdiskBonus}`);
         }
       } catch (e) {
-        getSpace.push(`\n   ❌0MB (原因: ${e.message})`);
+        getSpace.push(` 0`);
       }
     })());
   }
   await Promise.all(signPromises1);
-  if(getSpace.length == 1) getSpace.push(" 0M");
+  if(getSpace.length == 1) getSpace.push(" 0");
   result.push(getSpace.join(""));
 
   const signPromises2 = [];
-  getSpace = ["获得"];
+  getSpace = ["获得(M)"];
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
@@ -49,15 +49,15 @@ const doTask = async (cloudClient, familyID) => {
         try {
           const res = await cloudClient.familyUserSign(family.familyId);
           if (!res.signStatus) {
-            getSpace.push(` ✅${res.bonusSpace}M`);
+            getSpace.push(` ${res.bonusSpace}`);
           }
         } catch (e) {
-          getSpace.push(`\n ❌0MB (原因: ${e.message})`);
+          getSpace.push(` 0`);
         }
       })());
     }
     await Promise.all(signPromises2);
-    if(getSpace.length == 1) getSpace.push(" 0M");
+    if(getSpace.length == 1) getSpace.push(" 0");
     result.push(getSpace.join(""));
   }
   return result;
