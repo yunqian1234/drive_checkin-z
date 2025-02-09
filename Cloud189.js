@@ -10,8 +10,8 @@ log4js.configure({
     out: {
       type: "console",
       layout: {
-        type: "colored",
-        pattern: "%d{yyyy-MM-dd hh:mm:ss.SSS} - %m"
+        type: "pattern",
+        pattern: "\u001b[32m%d{yyyy-MM-dd hh:mm:ss} - %m\u001b[0m"
       }
     }
   },
