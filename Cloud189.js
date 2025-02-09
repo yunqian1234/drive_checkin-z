@@ -7,9 +7,15 @@ const { CloudClient } = require("cloud189-sdk");
 log4js.configure({
   appenders: {
     vcr: { type: "recording" },
-    out: { type: "console", layout: { type: "pattern", pattern: "%p - %d{yyyy-MM-dd hh:mm:ss.SSS} [%t] - %m" } },
+    out: {
+      type: "console",
+      layout: {
+        type: "colored",
+        pattern: "%d{yyyy-MM-dd hh:mm:ss.SSS} - %m"
+      }
+    }
   },
-  categories: { default: { appenders: ["vcr", "out"], level: "info" } },
+  categories: { default: { appenders: ["vcr", "out"], level: "info" } }
 });
 
 const logger = log4js.getLogger();
