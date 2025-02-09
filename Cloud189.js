@@ -11,7 +11,7 @@ log4js.configure({
       type: "console",
       layout: {
         type: "pattern",
-        pattern: "\u001b[32m%d{yyyy-MM-dd hh:mm:ss} - %m\u001b[0m"
+        pattern: "\u001b[32m%d{yyyy-MM-dd hh:mm:ss} -\u001b[0m %m"
       }
     }
   },
