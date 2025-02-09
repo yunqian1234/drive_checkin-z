@@ -35,7 +35,7 @@ const doTask = async (cloudClient, familyID) => {
     })());
   }
   await Promise.all(signPromises1);
-  if(getSpace == 1) getSpace.push(" 0M");
+  if(getSpace.length == 1) getSpace.push(" 0M");
   result.push(getSpace.join(""));
 
   const signPromises2 = [];
@@ -165,7 +165,7 @@ const main = async () => {
         result.forEach((r) => logger.log(r));
 
         logger.log(
-          `个人容量+ ${(cloudCapacityInfo.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacityInfo0.totalSize) / 1024 / 1024}M`
+          `实际 个人容量+ ${(cloudCapacityInfo.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacityInfo0.totalSize) / 1024 / 1024}M`
         );
         logger.log(
           `个人总容量：${(cloudCapacityInfo.totalSize /1024 /1024 /1024).toFixed(2)}G,家庭总容量：${(familyCapacityInfo.totalSize /1024 /1024 /1024).toFixed(2)}G`
@@ -174,7 +174,6 @@ const main = async () => {
         logger.error(e);
         if (e.code === "ETIMEDOUT") throw e;
       } finally {
-        logger.log(`账户 ${userNameInfo} 执行完毕`);
         logger.log("");
       }
     //})());
