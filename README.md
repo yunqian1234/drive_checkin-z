@@ -25,15 +25,16 @@ git clone https://github.com/zhlhlf/drive_checkin --depth=1
 cd drive_checkin && npm install
 
 #账号密码空格隔开每个账号也空格隔开 例：username1 psssword1 u2 p2 …
-export tyys=""
+export TYYS=""
 
-#指定签到的家庭云ID
-export tyy_family_id=""
+# 指定签到的家庭云ID
+export TYY_FAMILY_ID=""
 
-#私有云签到线程数量 默认10
-export private_threadx=""
-#每个家庭云签到线程数量 默认8
-export family_threadx=""
+# 私有云签到线程数量 默认10
+export PRIVATE_THREADX=""
+
+# 每个家庭云签到线程数量 默认8
+export FAMILY_THREADX=""
 
 #推送相关
 export TELEGRAM_CHAT_ID=""
