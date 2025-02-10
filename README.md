@@ -27,6 +27,9 @@ cd drive_checkin && npm install
 #账号密码空格隔开每个账号也空格隔开 例：username1 psssword1 u2 p2 …
 export tyys=""
 
+#指定签到的家庭云ID
+export tyy_family_id=""
+
 #私有云签到线程数量 默认10
 export private_threadx=""
 #每个家庭云签到线程数量 默认8

@@ -47,20 +47,20 @@ const doTask = async (cloudClient) => {
   getSpace = [`${firstSpace}签到家庭云获得(M)`];
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
-    familyInfoResp.map((f) => {
-      for (let i = 0; i < family_threadx; i++) {
-        signPromises2.push((async () => {
-          try {
-            const res = await cloudClient.familyUserSign(f.familyId);
-            if (!res.signStatus) {
-              getSpace.push(` ${res.bonusSpace}`);
-            }
-          } catch (e) {
-            getSpace.push(` 0`);
+    const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
+    result.push(`开始签到家庭云 ID: ${family.familyId}`);
+    for (let i = 0; i < family_threadx; i++) {
+      signPromises2.push((async () => {
+        try {
+          const res = await cloudClient.familyUserSign(family.familyId);
+          if (!res.signStatus) {
+            getSpace.push(` ${res.bonusSpace}`);
           }
-        })());
-      }
-    });
+        } catch (e) {
+          getSpace.push(` 0`);
+        }
+      })());
+    }
 
     await Promise.all(signPromises2);
     if(getSpace.length == 1) getSpace.push(" 0");
@@ -134,6 +134,7 @@ const env = require("./env");
 let firstSpace = "  ";
 
 let accounts = env.tyys
+let familyID = env.FAMILY_ID
 
 let WX_PUSHER_UID = env.WX_PUSHER_UID
 let WX_PUSHER_APP_TOKEN = env.WX_PUSHER_APP_TOKEN
