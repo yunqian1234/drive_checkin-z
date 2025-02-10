@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "cloud": "file:",
-    "cloud189-sdk": "^1.0.3",
+    "cloud189-sdk": "^1.0.5",
     "dotenv": "^16.4.5",
     "log4js": "^6.9.1",
     "node-jsencrypt": "^1.0.0",
