@@ -1,6 +1,7 @@
 
 module.exports = {
-    threadx: process.env.threadx || 10, 
+    private_threadx: process.env.private_threadx || 10, 
+    family_threadx: process.env.family_threadx || 8, 
     tyys: process.env.tyys || '',
     FAMILY_ID: process.env.tyy_family_id || "",
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || "",

@@ -2,9 +2,14 @@
 
 cd $(dirname $0)
 
+
 # username1 psssword1 u2 p2 …
 export tyys=""
-export tyy_family_id=""
+
+#私有云签到线程数量 默认10
+export private_threadx=""
+#每个家庭云签到线程数量 默认8
+export family_threadx=""
 
 export TELEGRAM_CHAT_ID=""
 export TELEGRAM_BOT_TOKEN=""
