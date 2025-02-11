@@ -31,7 +31,7 @@ const doTask = async (cloudClient) => {
   let getSpace = [`${firstSpace}签到个人云获得(M)`];
 
   if (i / 2 % 20 == 0 && env.private_only_first == 1) {
-    for (let i = 0; i < private_threadx; i++) {
+    for (let m = 0; m < private_threadx; m++) {
       signPromises1.push((async () => {
         try {
           const res1 = await cloudClient.userSign();
@@ -54,7 +54,7 @@ const doTask = async (cloudClient) => {
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
     result.push(`${firstSpace}开始签到家庭云 ID: ${family.familyId}`);
-    for (let i = 0; i < family_threadx; i++) {
+    for (let m = 0; m < family_threadx; m++) {
       signPromises2.push((async () => {
         try {
           const res = await cloudClient.familyUserSign(family.familyId);
@@ -205,7 +205,7 @@ const main = async () => {
       const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
     
       const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
-      logger.log(`${firstSpace}主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M \n\n`);
     }
   }
 
