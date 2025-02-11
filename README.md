@@ -33,7 +33,7 @@ export TYY_FAMILY_ID=""
 # 私有云签到线程数量 默认10
 export PRIVATE_THREADX=""
 
-# 每个家庭云签到线程数量 默认8
+# 每个家庭云签到线程数量 默认10
 export FAMILY_THREADX=""
 
 #推送相关
