@@ -159,9 +159,8 @@ const main = async () => {
   let userName0, password0, familyCapacitySize;
 
   for (i = 0; i < accounts.length; i += 2) {
-    let n = (i + 1) / 20;
+    let n = parseInt((i + 1) / 20);
     familyID = familyIDs[n];
-
     const [userName, password] = accounts.slice(i, i + 2);
     if (!userName || !password) continue;
 
