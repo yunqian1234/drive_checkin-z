@@ -20,7 +20,6 @@ jobs:
         - name: 获取本仓库源码
           uses: actions/checkout@main
           
-        - uses: actions/checkout@main
         - name: 安装node.js环境
           uses: actions/setup-node@main
           with:
@@ -31,8 +30,14 @@ jobs:
           with:
             secrets_json: ${{ toJSON(secrets) }}
           
-        - name: 操作
+        - name: 安装module模块
           run: |  
-              npm install >/dev/null 2>&1
-              npm start
+            npm install >/dev/null 2>&1
+
+        - name: 执行
+          uses: nick-fields/retry@master
+          with:
+            timeout_minutes: 30
+            max_attempts: 3
+            command: npm start
               

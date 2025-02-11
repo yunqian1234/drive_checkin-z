@@ -147,10 +147,12 @@ let family_threadx = env.family_threadx; //进程数
 
 const main = async () => {
   accounts = accounts.split(/[\n ]/);
+  if(accounts.length == 1) return;
 
   let userName0, password0, familyCapacitySize;
 
   for (let i = 0; i < accounts.length; i += 2) {
+
     const [userName, password] = accounts.slice(i, i + 2);
     if (!userName || !password) continue;
 
