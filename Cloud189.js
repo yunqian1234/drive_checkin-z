@@ -29,7 +29,7 @@ const doTask = async (cloudClient) => {
   const result = [];
   const signPromises1 = [];
 
-  if ((i + 1) % 20 == 0 && env.private_only_first == 1) {
+  if (i % 20 == 0 && env.private_only_first == 1) {
     let getSpace = [`${firstSpace}签到个人云获得(M)`];
     for (let i = 0; i < private_threadx; i++) {
       signPromises1.push((async () => {
