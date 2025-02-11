@@ -1,6 +1,6 @@
 
 module.exports = {
-    private_only_first: process.env.PRIVATE_ONLY_FIRST || 1,
+    private_only_first: process.env.PRIVATE_ONLY_FIRST || true,
     private_threadx: process.env.PRIVATE_THREADX || 10,
     family_threadx: process.env.FAMILY_THREADX || 10,
     tyys: process.env.TYYS || '',

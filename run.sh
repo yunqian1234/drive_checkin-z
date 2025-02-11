@@ -15,7 +15,7 @@ export PRIVATE_THREADX=""
 # 每个家庭云签到线程数量 默认10
 export FAMILY_THREADX=""
 
-# 是否只签主账号 1(是)  0为不签  默认1
+# 是否只签主账号 true(是)  false为不签  默认true
 export PRIVATE_ONLY_FIRST=""
 
 export TELEGRAM_CHAT_ID=""
