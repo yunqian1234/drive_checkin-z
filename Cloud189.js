@@ -28,9 +28,9 @@ const mask = (s, start, end) => s.split("").fill("*", start, end).join("");
 const doTask = async (cloudClient) => {
   const result = [];
   const signPromises1 = [];
+  let getSpace = [`${firstSpace}签到个人云获得(M)`];
 
-  if (i % 20 == 0 && env.private_only_first == 1) {
-    let getSpace = [`${firstSpace}签到个人云获得(M)`];
+  if (i / 2 % 20 == 0 && env.private_only_first == 1) {
     for (let i = 0; i < private_threadx; i++) {
       signPromises1.push((async () => {
         try {
@@ -154,12 +154,11 @@ let i = 0;
 
 const main = async () => {
   accounts = accounts.split(/[\n ]/);
-  if (accounts.length == 1) return;
 
   let userName0, password0, familyCapacitySize;
 
   for (i = 0; i < accounts.length; i += 2) {
-    let n = parseInt((i + 1) / 20);
+    let n = parseInt(i / 2 / 20);
     familyID = familyIDs[n];
     const [userName, password] = accounts.slice(i, i + 2);
     if (!userName || !password) continue;
@@ -171,12 +170,12 @@ const main = async () => {
     try {
       const cloudClient = new CloudClient(userName, password);
 
-
       logger.log(`${i / 2 + 1}.账户 ${userNameInfo} 开始执行`);
       await cloudClient.login();
       const { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
       const result = await doTask(cloudClient, env.FAMILY_ID);
-      if (i == 0) {
+      
+      if (i / 2 % 20 == 0) {
         userName0 = userName;
         password0 = password;
         familyCapacitySize = familyCapacityInfo0.totalSize;
@@ -197,18 +196,22 @@ const main = async () => {
       logger.log("");
     }
     //})());
+
+    if(i / 2 % 20 == 19 || i + 2 == accounts.length){
+      if (!userName0 || !password0) continue;
+      const cloudClient = new CloudClient(userName0, password0);
+      await cloudClient.login();
+      const userNameInfo = mask(userName0, 3, 7);
+      const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
+    
+      const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
+      logger.log(`${firstSpace}主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+    }
   }
 
   //await Promise.all(tasks);
 
 
-  const cloudClient = new CloudClient(userName0, password0);
-  await cloudClient.login();
-  const userNameInfo = mask(userName0, 3, 7);
-  const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
-
-  const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
-  logger.log(`${firstSpace}主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
 
 };
 
@@ -216,6 +219,7 @@ const main = async () => {
   try {
     await main();
   } finally {
+    logger.log("\n\n");
     const events = recording.replay();
     const content = events.map((e) => `${e.data.join("")}`).join("  \n");
     push("天翼云盘自动签到任务", content);
