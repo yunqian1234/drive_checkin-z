@@ -139,7 +139,7 @@ let firstSpace = "  ";
 let familyID;
 
 let accounts = env.tyys
-let familyIDs = env.FAMILY_ID.split(/[\n ]/);
+let familyIDs = env.FAMILY_ID.split(/[\n ]+/);
 
 let WX_PUSHER_UID = env.WX_PUSHER_UID
 let WX_PUSHER_APP_TOKEN = env.WX_PUSHER_APP_TOKEN
@@ -153,7 +153,7 @@ let family_threadx = env.family_threadx; //进程数
 let i = 0;
 
 const main = async () => {
-  accounts = accounts.split(/[\n ]/);
+  accounts = accounts.split(/[\n ]+/);
 
   let userName0, password0, familyCapacitySize;
 
