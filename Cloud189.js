@@ -205,7 +205,8 @@ const main = async () => {
       const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
     
       const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
-      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M \n\n`);
+      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+      logger.log("");
     }
   }
 
