@@ -69,8 +69,8 @@ const doTask = async (cloudClient) => {
       }
       await Promise.all(signPromises2);
       if (getSpace.length == 1) getSpace.push(" 0");
+      result.push(getSpace.join(""));
     }
-    result.push(getSpace.join(""));
   }
   return result;
 };
@@ -138,7 +138,7 @@ const push = (title, desp) => {
 
 let firstSpace = "  ";
 
-let accounts_group = env.tyys.trim().split("||")
+let accounts_group = env.tyys.trim().split("--")
 let FAMILY_ID
 let WX_PUSHER_UID = env.WX_PUSHER_UID
 let WX_PUSHER_APP_TOKEN = env.WX_PUSHER_APP_TOKEN
@@ -156,7 +156,6 @@ const main = async () => {
     accounts = accounts_group[p].trim().split(/[\n ]+/);
 
     let userName0, password0, familyCapacitySize;
-
     FAMILY_ID = accounts[0]
 
     for (let i = 1; i < accounts.length; i += 2) {
