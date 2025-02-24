@@ -8,16 +8,16 @@
 需新建以下加密变量：
 
 
-| 变量名🐈             | 说明 📌                                                                                                                                                 | 示例 🖼️               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `TYYS`               | 账号密码组合，格式：`账号1 密码1 账号2 密码2...`                                                                                                        | `user1 pwd1 user2 pwd2` |
-| `PRIVATE_THREADX`    | 个人云签到线程数（不填默认10）                                                                                                                          | `15`                    |
-| `FAMILY_THREADX`     | 家庭云签到线程数（不填默认10）                                                                                                                          | `8`                     |
-| `PRIVATE_ONLY_FIRST` | 个人云仅签主账号：`true`(是)/`false`(不签)（不填默认false）                                                                                             | `true`                  |
-| `TYY_FAMILY_ID`      | `1-20用f1 20-40用f2` 家庭云ID抓取教程：[Ailst文档](https://alist.nn.ci/zh/guide/drivers/189.html#%E5%AE%B6%E5%BA%AD%E8%BD%AC%E7%A7%BB)                  | `f1 f2`                 |
-| `WX_PUSHER_UID`      | 推送UID（微信扫码-我的-我的UID）[二维码](https://wxpusher.zjiecode.com/api/qrcode/4Ix7noqD3L7DMBoSlvig3t4hqjFWzPkdHqAYsg8IzkPreW7d8uGUHi9LJO4EcyJg.jpg) | `UID_123`               |
+| 变量名🐈             | 说明 📌                                                                                                                                                 | 示例 🖼️                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `TYYS`               | 家庭ID账号密码组，格式：`家庭云ID 账号1 密码1 账号2 密码2 -- 家庭云ID 账号1 密码1 账号2 密码2`                                                       | `FID u1 p1 u2 p2 -- FID u1 p1 u2 p2` |
+| `PRIVATE_THREADX`    | 个人云签到线程数（不填默认10）                                                                                                                          | `15`                                 |
+| `FAMILY_THREADX`     | 家庭云签到线程数（不填默认10）                                                                                                                          | `8`                                  |
+| `PRIVATE_ONLY_FIRST` | 个人云仅签主账号：`true`(是)/`false`(不签)（不填默认false）                                                                                             | `true`                               |
+| `WX_PUSHER_UID`      | 推送UID（微信扫码-我的-我的UID）[二维码](https://wxpusher.zjiecode.com/api/qrcode/4Ix7noqD3L7DMBoSlvig3t4hqjFWzPkdHqAYsg8IzkPreW7d8uGUHi9LJO4EcyJg.jpg) | `UID_123`                            |
 
 ---
+`家庭云ID抓取教程：`[Ailst文档](https://alist.nn.ci/zh/guide/drivers/189.html#%E5%AE%B6%E5%BA%AD%E8%BD%AC%E7%A7%BB) 
 
 ### 🚀 快速执行指南
 
