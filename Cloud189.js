@@ -30,7 +30,7 @@ const doTask = async (cloudClient) => {
   const signPromises1 = [];
   let getSpace = [`${firstSpace}签到个人云获得(M)`];
 
-  if (env.private_only_first == false || i / 2 % 20 == 0) {
+  if (env.private_only_first == false || i == 1) {
     for (let m = 0; m < private_threadx; m++) {
       signPromises1.push((async () => {
         try {
@@ -148,6 +148,7 @@ let telegramBotId = env.TELEGRAM_CHAT_ID
 
 let private_threadx = env.private_threadx; //进程数
 let family_threadx = env.family_threadx; //进程数
+let i
 
 const main = async () => {
   let accounts
@@ -158,7 +159,7 @@ const main = async () => {
     let userName0, password0, familyCapacitySize;
     FAMILY_ID = accounts[0]
 
-    for (let i = 1; i < accounts.length; i += 2) {
+    for (i = 1; i < accounts.length; i += 2) {
       const [userName, password] = accounts.slice(i, i + 2);
       if (!userName || !password) continue;
 
