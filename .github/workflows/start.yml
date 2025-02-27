@@ -19,6 +19,13 @@ jobs:
             
         - name: 获取本仓库源码
           uses: actions/checkout@main
+
+        - name: Cache Primes
+          id: cache-primes
+          uses: actions/cache@v4
+          with:
+            path: tyys_cookies.json
+            key: ${{ runner.os }}-by_zhlhlf
           
         - name: 安装node.js环境
           uses: actions/setup-node@main
