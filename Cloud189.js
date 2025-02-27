@@ -4,7 +4,7 @@ require("dotenv").config();
 const log4js = require("log4js");
 const recording = require("log4js/lib/appenders/recording");
 const superagent = require("superagent");
-const { CloudClient } = require("cloud189-sdk");
+const CloudClient = require("./CloudClient");
 const env = require("./env");
 
 log4js.configure({
@@ -90,7 +90,7 @@ const pushTelegramBot = (title, desp) => {
     .timeout(3000)
     .end((err, res) => {
       if (err) {
-        logger.error(`TelegramBot推送失败:${JSON.stringify(err)}`);
+        logger.error(`TelegramBot推送失败:${err}`);
         return;
       }
       const json = JSON.parse(res.text);
@@ -150,13 +150,17 @@ let private_threadx = env.private_threadx; //进程数
 let family_threadx = env.family_threadx; //进程数
 let i
 
+//用来存储cookies
+const CookiesMap = new Map();
+let cloudClient = new CloudClient()
+
 const main = async () => {
   let accounts
 
   for (let p = 0; p < accounts_group.length; p++) {
     accounts = accounts_group[p].trim().split(/[\n ]+/);
 
-    let userName0, password0, familyCapacitySize;
+    let familyCapacitySize, firstUserName;
     FAMILY_ID = accounts[0]
 
     for (i = 1; i < accounts.length; i += 2) {
@@ -166,18 +170,22 @@ const main = async () => {
       const userNameInfo = mask(userName, 3, 7);
 
       try {
-        const cloudClient = new CloudClient(userName, password);
+        cloudClient._setLogin(userName, password)
 
         logger.log(`${(i - 1) / 2 + 1}.账户 ${userNameInfo} 开始执行`);
+
         await cloudClient.login();
+        CookiesMap.set(userName, cloudClient.getCookieMap())
+
         const { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
         const result = await doTask(cloudClient);
 
         if (i == 1) {
-          userName0 = userName;
-          password0 = password;
+          firstUserName = userName
           familyCapacitySize = familyCapacityInfo0.totalSize;
         }
+
+        cloudClient.setCookieMap(CookiesMap.get(firstUserName))
         const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
         result.forEach((r) => logger.log(r));
 
@@ -197,9 +205,8 @@ const main = async () => {
     }
 
     try {
-      const cloudClient = new CloudClient(userName0, password0);
-      await cloudClient.login();
-      const userNameInfo = mask(userName0, 3, 7);
+      cloudClient.setCookieMap(CookiesMap.get(firstUserName))
+      const userNameInfo = mask(firstUserName, 3, 7);
       const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
 
       const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
