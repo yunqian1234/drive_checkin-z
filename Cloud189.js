@@ -159,7 +159,7 @@ const main = async () => {
   for (let p = 0; p < accounts_group.length; p++) {
     accounts = accounts_group[p].trim().split(/[\n ]+/);
 
-    let familyCapacitySize,familyCapacitySize2, firstUserName;
+    let familyCapacitySize, familyCapacitySize2, firstUserName;
     FAMILY_ID = accounts[0]
 
     for (i = 1; i < accounts.length; i += 2) {
@@ -177,10 +177,11 @@ const main = async () => {
         CookiesMap.set(userName, cloudClient.getCookieMap())
 
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
+
         const result = await doTask(cloudClient);
         result.forEach((r) => logger.log(r));
 
-        let { cloudCapacityInfo: cloudCapacityInfo2} = await cloudClient.getUserSizeInfo();
+        let { cloudCapacityInfo: cloudCapacityInfo2 , familyCapacityInfo: familyCapacityInfo2 } = await cloudClient.getUserSizeInfo();
 
         if (i == 1) {
           firstUserName = userName
@@ -190,13 +191,13 @@ const main = async () => {
 
         //重新获取主账号的空间信息
         cloudClient.setCookieMap(CookiesMap.get(firstUserName))
-        const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
+        const { familyCapacityInfo } = await cloudClient.getUserSizeInfo();
 
         logger.log(
           `${firstSpace}实际：个人容量+ ${(cloudCapacityInfo2.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacitySize2) / 1024 / 1024}M`
         );
         logger.log(
-          `${firstSpace}个人总容量：${(cloudCapacityInfo.totalSize / 1024 / 1024 / 1024).toFixed(2)}G, 家庭总容量：${(familyCapacityInfo.totalSize / 1024 / 1024 / 1024).toFixed(2)}G`
+          `${firstSpace}个人总容量：${(cloudCapacityInfo2.totalSize / 1024 / 1024 / 1024).toFixed(2)}G, 家庭总容量：${(familyCapacityInfo2.totalSize / 1024 / 1024 / 1024).toFixed(2)}G`
         );
         familyCapacitySize2 = familyCapacityInfo.totalSize
 
@@ -210,17 +211,10 @@ const main = async () => {
 
     }
 
-    try {
-      cloudClient.setCookieMap(CookiesMap.get(firstUserName))
-      const userNameInfo = mask(firstUserName, 3, 7);
-      const { familyCapacityInfo: finalfamilyCapacityInfo } = await cloudClient.getUserSizeInfo();
+    const capacityChange = familyCapacitySize2 - familyCapacitySize;
+    logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+    logger.log("");
 
-      const capacityChange = finalfamilyCapacityInfo.totalSize - familyCapacitySize;
-      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
-      logger.log("");
-    } catch (e) {
-
-    }
 
   }
 
