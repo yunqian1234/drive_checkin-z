@@ -39,7 +39,6 @@ const doTask = async (cloudClient) => {
             getSpace.push(` ${res1.netdiskBonus}`);
           }
         } catch (e) {
-          getSpace.push(` 0`);
         }
       })());
     }
@@ -160,7 +159,7 @@ const main = async () => {
   for (let p = 0; p < accounts_group.length; p++) {
     accounts = accounts_group[p].trim().split(/[\n ]+/);
 
-    let familyCapacitySize, firstUserName;
+    let familyCapacitySize,familyCapacitySize2, firstUserName;
     FAMILY_ID = accounts[0]
 
     for (i = 1; i < accounts.length; i += 2) {
@@ -177,24 +176,31 @@ const main = async () => {
         await cloudClient.login();
         CookiesMap.set(userName, cloudClient.getCookieMap())
 
-        const { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
+        let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
         const result = await doTask(cloudClient);
+        result.forEach((r) => logger.log(r));
+
+        let { cloudCapacityInfo: cloudCapacityInfo2} = await cloudClient.getUserSizeInfo();
 
         if (i == 1) {
           firstUserName = userName
-          familyCapacitySize = familyCapacityInfo0.totalSize;
+          familyCapacitySize = familyCapacityInfo0.totalSize
+          familyCapacitySize2 = familyCapacitySize
         }
 
+        //重新获取主账号的空间信息
         cloudClient.setCookieMap(CookiesMap.get(firstUserName))
         const { cloudCapacityInfo, familyCapacityInfo } = await cloudClient.getUserSizeInfo();
-        result.forEach((r) => logger.log(r));
 
         logger.log(
-          `${firstSpace}实际：个人容量+ ${(cloudCapacityInfo.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacityInfo0.totalSize) / 1024 / 1024}M`
+          `${firstSpace}实际：个人容量+ ${(cloudCapacityInfo2.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacitySize2) / 1024 / 1024}M`
         );
         logger.log(
           `${firstSpace}个人总容量：${(cloudCapacityInfo.totalSize / 1024 / 1024 / 1024).toFixed(2)}G, 家庭总容量：${(familyCapacityInfo.totalSize / 1024 / 1024 / 1024).toFixed(2)}G`
         );
+        familyCapacitySize2 = familyCapacityInfo.totalSize
+
+
       } catch (e) {
         logger.error(e);
         if (e.code === "ETIMEDOUT") throw e;

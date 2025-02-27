@@ -111,7 +111,7 @@ class CloudClient {
 
     // 登录
     async login() {
-        await new Promise((resolve, reject) => {
+        let code = await new Promise((resolve, reject) => {
             Promise.all([
                 this.getEncrypt(),
                 this.redirectURL().then((query) => {
@@ -155,15 +155,16 @@ class CloudClient {
     }
 
     // 获取 API 数据
-    fetchAPI(task) {
+    fetchAPI = (task) => {
         const q = url_1.default.parse(task, true);
+        config.log(this.cookieJar)
         return got_1.default
             .get(task, {
-                headers: Object.assign(Object.assign({}, headers), { Host: q.host }),
-                cookieJar: this.cookieJar,
-            })
+            headers: Object.assign(Object.assign({}, headers), { Host: q.host }),
+            cookieJar: this.cookieJar,
+        })
             .json();
-    }
+    };
 
     // 获取 Cookie 映射
     getCookieMap() {
@@ -179,7 +180,7 @@ class CloudClient {
             account: this.username,
             password: this.password,
             accesstoken: this.accessToken,
-            cookie: cookie,
+            cookie: `COOKIE_LOGIN_USER=${cookie}`,
             cookieJar: this.cookieJar
         };
         return a;
@@ -190,7 +191,7 @@ class CloudClient {
         this.accessToken = a.accesstoken
         this.username = a.account
         this.password = a.password
-        this.cookieJar = a.CookieJar
+        this.cookieJar = a.cookieJar
     }
 
     // 获取用户大小信息
