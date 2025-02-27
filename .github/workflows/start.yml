@@ -33,11 +33,6 @@ jobs:
         - name: 安装module模块
           run: |  
             npm install >/dev/null 2>&1
+            npm start
 
-        - name: 执行
-          uses: nick-fields/retry@master
-          with:
-            timeout_minutes: 30
-            max_attempts: 3
-            command: npm start
               
