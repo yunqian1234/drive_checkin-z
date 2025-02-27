@@ -5,6 +5,8 @@ const log4js = require("log4js");
 const recording = require("log4js/lib/appenders/recording");
 const superagent = require("superagent");
 const CloudClient = require("./CloudClient");
+const fs = require('fs');
+const path = require('path');
 const env = require("./env");
 
 log4js.configure({
@@ -147,15 +149,22 @@ let telegramBotId = env.TELEGRAM_CHAT_ID
 
 let private_threadx = env.private_threadx; //进程数
 let family_threadx = env.family_threadx; //进程数
+let filePath = path.join(__dirname, 'tyys_cookies.json'); // cookie保存文件路径
 let i
 
 //用来存储cookies
-const CookiesMap = new Map();
+let CookiesMap = new Map();
 let cloudClient = new CloudClient()
 let userNameInfo;
 
 const main = async () => {
   let accounts
+
+  if(fs.existsSync(filePath)){
+    const readSerializedMap = fs.readFileSync(filePath, 'utf-8'); // 读取文件内容
+    // 反序列化字符串为 Map 对象
+    CookiesMap = new Map(JSON.parse(readSerializedMap));
+  }
 
   for (let p = 0; p < accounts_group.length; p++) {
     accounts = accounts_group[p].trim().split(/[\n ]+/);
@@ -170,12 +179,16 @@ const main = async () => {
       userNameInfo = mask(userName, 3, 7);
 
       try {
-        cloudClient._setLogin(userName, password)
 
         logger.log(`${(i - 1) / 2 + 1}.账户 ${userNameInfo} 开始执行`);
 
-        await cloudClient.login();
-        CookiesMap.set(userName, cloudClient.getCookieMap())
+        if(CookiesMap.has(userName)){
+          cloudClient.setCookieMap(CookiesMap.get(userName))
+        }else{
+          cloudClient._setLogin(userName, password)
+          await cloudClient.login();
+          CookiesMap.set(userName, cloudClient.getCookieMap())
+        }
 
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
 
@@ -209,15 +222,17 @@ const main = async () => {
       } finally {
         logger.log("");
       }
-      const capacityChange = familyCapacitySize2 - familyCapacitySize;
-      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
-      logger.log("");
+
     }
 
-
-
+    const capacityChange = familyCapacitySize2 - familyCapacitySize;
+    logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+    logger.log("");
 
   }
+  
+  const serializedMap = JSON.stringify(Array.from(CookiesMap),null, 2);
+  fs.writeFileSync(filePath, serializedMap, 'utf-8'); // 写入文件
 
 };
 

@@ -17,7 +17,8 @@
 | `WX_PUSHER_UID`      | 推送UID（微信扫码-我的-我的UID）[二维码](https://wxpusher.zjiecode.com/api/qrcode/4Ix7noqD3L7DMBoSlvig3t4hqjFWzPkdHqAYsg8IzkPreW7d8uGUHi9LJO4EcyJg.jpg) | `UID_123`                            |
 
 ---
-`家庭云ID抓取教程：`[Ailst文档](https://alist.nn.ci/zh/guide/drivers/189.html#%E5%AE%B6%E5%BA%AD%E8%BD%AC%E7%A7%BB) 
+
+`家庭云ID抓取教程：`[Ailst文档](https://alist.nn.ci/zh/guide/drivers/189.html#%E5%AE%B6%E5%BA%AD%E8%BD%AC%E7%A7%BB)
 
 ### 🚀 快速执行指南
 
@@ -25,7 +26,7 @@
 ✅点击仓库顶部 `Actions` → **`I understand my workflows, go ahead and enable them`** 开启权限
 
 2️⃣  **触发运行**
-🌟 给仓库点个 **Star**
+🌟 啊喂 你都fork了 给仓库点个 **Star** 啊
 
 3️⃣  **定时任务**
 ⏰ 每天 **北京时间 5:00** 自动执行
@@ -71,7 +72,13 @@ npm run start
 ql repo https://github.com/zhlhlf/drive_checkin.git "Cloud189.js" "" "env.js" "main" "js"
 
 # 依赖安装
-superagent log4js cloud189-sdk
+    "dotenv": "^16.4.5",
+    "got": "^11.8.2",
+    "log4js": "^6.9.1",
+    "node-jsencrypt": "^1.0.0",
+    "superagent": "^9.0.1",
+    "tough-cookie": "^4.1.4",
+    "xml2js": "^0.6.2"
 
 # 配置好上面的环境变量
 ```
