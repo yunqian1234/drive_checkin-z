@@ -152,6 +152,7 @@ let i
 //用来存储cookies
 const CookiesMap = new Map();
 let cloudClient = new CloudClient()
+let userNameInfo;
 
 const main = async () => {
   let accounts
@@ -166,7 +167,7 @@ const main = async () => {
       const [userName, password] = accounts.slice(i, i + 2);
       if (!userName || !password) continue;
 
-      const userNameInfo = mask(userName, 3, 7);
+      userNameInfo = mask(userName, 3, 7);
 
       try {
         cloudClient._setLogin(userName, password)
@@ -208,12 +209,12 @@ const main = async () => {
       } finally {
         logger.log("");
       }
-
+      const capacityChange = familyCapacitySize2 - familyCapacitySize;
+      logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
+      logger.log("");
     }
 
-    const capacityChange = familyCapacitySize2 - familyCapacitySize;
-    logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
-    logger.log("");
+
 
 
   }
