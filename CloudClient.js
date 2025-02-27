@@ -142,9 +142,9 @@ class CloudClient {
                     } else {
                         return got_1.default
                             .get(res.toUrl, { headers, cookieJar: this.cookieJar })
-                            .then((r) =>{
+                            .then((r) => {
                                 resolve(r.statusCode)
-                            } );
+                            });
                     }
                 })
                 .catch((e) => reject(e));
@@ -160,9 +160,9 @@ class CloudClient {
         config.log(this.cookieJar)
         return got_1.default
             .get(task, {
-            headers: Object.assign(Object.assign({}, headers), { Host: q.host }),
-            cookieJar: this.cookieJar,
-        })
+                headers: Object.assign(Object.assign({}, headers), { Host: q.host }),
+                cookieJar: this.cookieJar,
+            })
             .json();
     };
 
@@ -206,6 +206,20 @@ class CloudClient {
             .json();
     }
 
+    cookie_is_believe() {
+        return got_1.default
+            .get("https://cloud.189.cn/api/portal/getUserSizeInfo.action", {
+                headers: {
+                    Accept: "application/json;charset=UTF-8",
+                },
+                cookieJar: this.cookieJar,
+            }).then(r => {
+                return true
+            }).catch(e => {
+                return false
+            })
+    }
+
     // 用户签到
     userSign() {
         return this.fetchAPI(`https://cloud.189.cn/mkt/userSign.action?rand=${new Date().getTime()}&clientType=TELEANDROID&version=${config.version}&model=${config.model}`);
@@ -236,8 +250,8 @@ class CloudClient {
     }
 
 
-        //邀请用户进入家庭云
-    async inviteUserToFamily(account){
+    //邀请用户进入家庭云
+    async inviteUserToFamily(account) {
         let url = "https://api.cloud.189.cn/open/family/manage/addMember.action"
         const { familyInfoResp } = await this.getFamilyList();
         let familyId = familyInfoResp.find((f) => f.userRole == 1).familyId;
@@ -254,32 +268,32 @@ class CloudClient {
             "account": account
         }
         return got_1.default
-        .post(url, {
-            headers: {
-                "Sign-Type": "1",
-                signature: signature,
-                timestamp: time,
-                accesstoken: this.accessToken,
-            },
-            form: payload,
-            cookieJar: this.cookieJar,
-        }).then(response => {
-            let out
-            xml2js.parseString(response.body, { explicitArray: false }, (err, result) => {
-                if (err) {
-                    console.error('解析错误:', err);
-                    return;
-                }
-                out = result.inviteUrlResponse.inviteUrl;
+            .post(url, {
+                headers: {
+                    "Sign-Type": "1",
+                    signature: signature,
+                    timestamp: time,
+                    accesstoken: this.accessToken,
+                },
+                form: payload,
+                cookieJar: this.cookieJar,
+            }).then(response => {
+                let out
+                xml2js.parseString(response.body, { explicitArray: false }, (err, result) => {
+                    if (err) {
+                        console.error('解析错误:', err);
+                        return;
+                    }
+                    out = result.inviteUrlResponse.inviteUrl;
+                });
+                return out;
+            })
+            .catch(error => {
+                console.error('邀请失败:', error.message);
             });
-            return out;
-        })
-        .catch(error => {
-            console.error('邀请失败:', error.message);
-        });
     }
 
-    async addUserToFamily(familyId,invite_account){//家庭云ID 邀请你的手机号码
+    async addUserToFamily(familyId, invite_account) {//家庭云ID 邀请你的手机号码
         const time = String(Date.now());
         let url = `https://api.cloud.189.cn/open/family/manage/doAddMember.action?familyId=${familyId}&inviteAccount=${invite_account}&account=${this.username}&date=${time}`
         const signature = this._getSignature({
@@ -291,20 +305,20 @@ class CloudClient {
             "inviteAccount": invite_account
         });
         return got_1.default
-        .get(url, {
-            headers: {
-                "Sign-Type": "1",
-                signature: signature,
-                timestamp: time,
-                accesstoken: this.accessToken,
-                x_request_id: crypto_1.default.randomBytes(16).toString('hex')
-            },
-            cookieJar: this.cookieJar,
-        }).then(res => {
-            return res.statusCode
-        }).catch((e)=>{
-            return res.statusCode
-        })
+            .get(url, {
+                headers: {
+                    "Sign-Type": "1",
+                    signature: signature,
+                    timestamp: time,
+                    accesstoken: this.accessToken,
+                    x_request_id: crypto_1.default.randomBytes(16).toString('hex')
+                },
+                cookieJar: this.cookieJar,
+            }).then(res => {
+                return res.statusCode
+            }).catch((e) => {
+                return res.statusCode
+            })
     }
 
     // 通过 SessionKey 获取 AccessToken

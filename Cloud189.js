@@ -163,7 +163,9 @@ const main = async () => {
   if(fs.existsSync(filePath)){
     const readSerializedMap = fs.readFileSync(filePath, 'utf-8'); // 读取文件内容
     // 反序列化字符串为 Map 对象
-    CookiesMap = new Map(JSON.parse(readSerializedMap));
+    try{
+      CookiesMap = new Map(JSON.parse(readSerializedMap));
+    }catch(e){}
   }
 
   for (let p = 0; p < accounts_group.length; p++) {
@@ -184,7 +186,10 @@ const main = async () => {
 
         if(CookiesMap.has(userName)){
           cloudClient.setCookieMap(CookiesMap.get(userName))
-        }else{
+        }
+
+        let cookie_is_believe = await cloudClient.cookie_is_believe()
+        if(!cookie_is_believe){
           cloudClient._setLogin(userName, password)
           await cloudClient.login();
           CookiesMap.set(userName, cloudClient.getCookieMap())
