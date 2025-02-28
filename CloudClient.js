@@ -195,6 +195,14 @@ class CloudClient {
         this.cookieJar = tough_cookie_1.CookieJar.fromJSON(a.cookieJar)
     }
 
+    // 设置 Cookie 映射
+    cleanCookie() {
+        this.accessToken = null
+        this.username = null
+        this.password = null
+        this.cookieJar = null
+    }
+
     // 获取用户大小信息
     getUserSizeInfo() {
         return got_1.default

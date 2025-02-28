@@ -192,14 +192,12 @@ const main = async () => {
           gg+=`本地没有储存此账号cookie`          
         }
 
-
-
         let cookie_is_believe = await cloudClient.cookie_is_believe()
         if(!cookie_is_believe){
           cloudClient._setLogin(userName, password)
           await cloudClient.login();
           CookiesMap.set(userName, cloudClient.getCookieMap())
-          gg+=` 失效重新登录`                   
+          gg+=` 失效重新登录`           
         }else{
           gg+=` 并且有效`          
         }
@@ -221,6 +219,9 @@ const main = async () => {
         //重新获取主账号的空间信息
         cloudClient.setCookieMap(CookiesMap.get(firstUserName))
         const { familyCapacityInfo } = await cloudClient.getUserSizeInfo();
+        
+        //打扫cookie
+        cloudClient.cleanCookie()
 
         logger.log(
           `${firstSpace}实际：个人容量+ ${(cloudCapacityInfo2.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacitySize2) / 1024 / 1024}M`
@@ -229,7 +230,6 @@ const main = async () => {
           `${firstSpace}个人总容量：${(cloudCapacityInfo2.totalSize / 1024 / 1024 / 1024).toFixed(2)}G, 家庭总容量：${(familyCapacityInfo2.totalSize / 1024 / 1024 / 1024).toFixed(2)}G`
         );
         familyCapacitySize2 = familyCapacityInfo.totalSize
-
 
       } catch (e) {
         logger.error(e);
