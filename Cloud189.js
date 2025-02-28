@@ -50,11 +50,11 @@ const doTask = async (cloudClient) => {
   }
 
   const signPromises2 = [];
-  getSpace = ["获得(M)"];
+  getSpace = [`${firstSpace}获得(M)`];
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == FAMILY_ID) || familyInfoResp[0];
-    result.push(`开始签到家庭云 ID: ${family.familyId}`);
+    result.push(`${firstSpace}开始签到家庭云 ID: ${family.familyId}`);
     for (let i = 0; i < family_threadx; i++) {
       signPromises2.push((async () => {
         try {
