@@ -69,16 +69,14 @@ npm run start
 
 ```bash
 # 订阅链接
-ql repo https://github.com/zhlhlf/drive_checkin.git "Cloud189.js" "" "env.js" "main" "js"
+ql repo https://github.com/zhlhlf/drive_checkin.git "Cloud189.js" "" ".*" "main" "js | json"
 
 # 依赖安装
-    "dotenv": "^16.4.5",
-    "got": "^11.8.2",
-    "log4js": "^6.9.1",
-    "node-jsencrypt": "^1.0.0",
-    "superagent": "^9.0.1",
-    "tough-cookie": "^4.1.4",
-    "xml2js": "^0.6.2"
+    xml2js
+    tough-cookie
+    node-jsencrypt
+    superagent
+    log4js
 
 # 配置好上面的环境变量
 ```
