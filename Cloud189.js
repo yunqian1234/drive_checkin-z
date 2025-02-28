@@ -33,7 +33,7 @@ const doTask = async (cloudClient) => {
   let getSpace = [`${firstSpace}签到个人云获得(M)`];
 
   if (env.private_only_first == false || i == 1) {
-    for (let m = 0; m < family_threadx; m++) {
+    for (let m = 0; m < private_threadx; m++) {
       signPromises1.push((async () => {
         try {
           const res1 = await cloudClient.userSign();
@@ -55,7 +55,7 @@ const doTask = async (cloudClient) => {
   if (familyInfoResp) {
     const family = familyInfoResp.find((f) => f.familyId == FAMILY_ID) || familyInfoResp[0];
     result.push(`开始签到家庭云 ID: ${family.familyId}`);
-    for (let i = 0; i < threadx; i++) {
+    for (let i = 0; i < family_threadx; i++) {
       signPromises2.push((async () => {
         try {
           const res = await cloudClient.familyUserSign(family.familyId);
