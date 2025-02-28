@@ -162,7 +162,9 @@ const main = async () => {
     // 反序列化字符串为 Map 对象
     try{
       CookiesMap = new Map(JSON.parse(readSerializedMap));
-    }catch(e){}
+    }catch(e){
+      console.error(e)
+    }
   }
 
   for (let p = 0; p < accounts_group.length; p++) {
@@ -190,6 +192,8 @@ const main = async () => {
           gg+=`本地没有储存此账号cookie`          
         }
 
+
+
         let cookie_is_believe = await cloudClient.cookie_is_believe()
         if(!cookie_is_believe){
           cloudClient._setLogin(userName, password)
@@ -200,6 +204,7 @@ const main = async () => {
           gg+=` 并且有效`          
         }
         logger.log(gg)
+
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
 
         const result = await doTask(cloudClient);

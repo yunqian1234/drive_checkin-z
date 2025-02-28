@@ -6,6 +6,7 @@ const url_1 = __importDefault(require("url"));
 const node_jsencrypt_1 = __importDefault(require("node-jsencrypt"));
 const crypto_1 = __importDefault(require("crypto"));
 const got_1 = __importDefault(require("got"));
+const { console } = require("inspector");
 const tough_cookie_1 = require("tough-cookie");
 const xml2js = require('xml2js');
 
@@ -206,18 +207,13 @@ class CloudClient {
             .json();
     }
 
-    cookie_is_believe() {
-        return got_1.default
-            .get("https://cloud.189.cn/api/portal/getUserSizeInfo.action", {
-                headers: {
-                    Accept: "application/json;charset=UTF-8",
-                },
-                cookieJar: this.cookieJar,
-            }).then(r => {
-                return true
-            }).catch(e => {
-                return false
-            })
+    async cookie_is_believe() {
+        try{
+            await this.getUserSizeInfo()
+            return true
+          }catch(e){
+            return false
+          }
     }
 
     // 用户签到
