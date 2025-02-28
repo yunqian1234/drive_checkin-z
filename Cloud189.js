@@ -33,7 +33,7 @@ const doTask = async (cloudClient) => {
   let getSpace = [`${firstSpace}签到个人云获得(M)`];
 
   if (env.private_only_first == false || i == 1) {
-    for (let m = 0; m < private_threadx; m++) {
+    for (let m = 0; m < family_threadx; m++) {
       signPromises1.push((async () => {
         try {
           const res1 = await cloudClient.userSign();
