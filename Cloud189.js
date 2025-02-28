@@ -199,7 +199,7 @@ const main = async () => {
         }else{
           gg+=` 并且有效`          
         }
-
+        logger.log(gg)
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
 
         const result = await doTask(cloudClient);
