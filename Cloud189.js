@@ -220,8 +220,6 @@ const main = async () => {
         cloudClient.setCookieMap(CookiesMap.get(firstUserName))
         const { familyCapacityInfo } = await cloudClient.getUserSizeInfo();
         
-        //打扫cookie
-        cloudClient.cleanCookie()
 
         logger.log(
           `${firstSpace}实际：个人容量+ ${(cloudCapacityInfo2.totalSize - cloudCapacityInfo0.totalSize) / 1024 / 1024}M, 家庭容量+ ${(familyCapacityInfo.totalSize - familyCapacitySize2) / 1024 / 1024}M`
@@ -235,6 +233,8 @@ const main = async () => {
         logger.error(e);
         if (e.code === "ETIMEDOUT") throw e;
       } finally {
+        //打扫cookie
+        cloudClient.cleanCookie()
         logger.log("");
       }
 
