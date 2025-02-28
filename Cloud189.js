@@ -181,8 +181,13 @@ const main = async () => {
 
         logger.log(`${(i - 1) / 2 + 1}.账户 ${userNameInfo} 开始执行`);
 
+        let gg=`${firstSpace}`
+        
         if(CookiesMap.has(userName)){
           cloudClient.setCookieMap(CookiesMap.get(userName))
+          gg+=`本地有储存此账号cookie`
+        }else{
+          gg+=`本地没有储存此账号cookie`          
         }
 
         let cookie_is_believe = await cloudClient.cookie_is_believe()
@@ -190,8 +195,9 @@ const main = async () => {
           cloudClient._setLogin(userName, password)
           await cloudClient.login();
           CookiesMap.set(userName, cloudClient.getCookieMap())
+          gg+=` 失效重新登录`                   
         }else{
-           logger.log(`本账号使用本地储存的cookie`);
+          gg+=` 并且有效`          
         }
 
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
