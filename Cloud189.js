@@ -50,32 +50,29 @@ const doTask = async (cloudClient) => {
   }
 
   const signPromises2 = [];
-  getSpace = [`${firstSpace}签到家庭云获得(M)`];
+  getSpace = ["获得(M)"];
   const { familyInfoResp } = await cloudClient.getFamilyList();
   if (familyInfoResp) {
-    const family = familyInfoResp.find((f) => f.familyId == FAMILY_ID);
-    if (family) {
-      result.push(`${firstSpace}开始签到家庭云 ID: ${family.familyId}`);
-      for (let m = 0; m < family_threadx; m++) {
-        signPromises2.push((async () => {
-          try {
-            const res = await cloudClient.familyUserSign(family.familyId);
-            if (!res.signStatus) {
-              getSpace.push(` ${res.bonusSpace}`);
-            }
-          } catch (e) {
-            getSpace.push(` 0`);
+    const family = familyInfoResp.find((f) => f.familyId == familyID) || familyInfoResp[0];
+    result.push(`开始签到家庭云 ID: ${family.familyId}`);
+    for (let i = 0; i < threadx; i++) {
+      signPromises2.push((async () => {
+        try {
+          const res = await cloudClient.familyUserSign(family.familyId);
+          if (!res.signStatus) {
+            getSpace.push(` ${res.bonusSpace}`);
           }
-        })());
-      }
-      await Promise.all(signPromises2);
-      if (getSpace.length == 1) getSpace.push(" 0");
-      result.push(getSpace.join(""));
+        } catch (e) {
+          getSpace.push(` 0`);
+        }
+      })());
     }
+    await Promise.all(signPromises2);
+    if(getSpace.length == 1) getSpace.push(" 0");
+    result.push(getSpace.join(""));
   }
   return result;
 };
-
 
 const pushTelegramBot = (title, desp) => {
   if (!(telegramBotToken && telegramBotId)) {
@@ -229,7 +226,7 @@ const main = async () => {
       }
 
     }
-
+    userNameInfo = mask(firstUserName, 3, 7);
     const capacityChange = familyCapacitySize2 - familyCapacitySize;
     logger.log(`主账号${userNameInfo} 家庭容量+ ${capacityChange / 1024 / 1024}M`);
     logger.log("");
