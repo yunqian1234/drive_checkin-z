@@ -190,6 +190,8 @@ const main = async () => {
           cloudClient._setLogin(userName, password)
           await cloudClient.login();
           CookiesMap.set(userName, cloudClient.getCookieMap())
+        }else{
+           logger.log(`本账号使用本地储存的cookie`);
         }
 
         let { cloudCapacityInfo: cloudCapacityInfo0, familyCapacityInfo: familyCapacityInfo0 } = await cloudClient.getUserSizeInfo();
