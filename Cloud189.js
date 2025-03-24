@@ -7,14 +7,6 @@ const fs = require('fs');
 const path = require('path');
 const env = require("./env");
 
-// 读取 GitHub Actions 设置的环境变量
-const envVar1 = process.env.ENV_VAR1;
-const envVar2 = process.env.ENV_VAR2;
-
-// 可以根据需要使用这些环境变量，这里简单打印出来作为示例
-console.log(`ENV_VAR1: ${envVar1}`);
-console.log(`ENV_VAR2: ${envVar2}`);
-
 log4js.configure({
   appenders: {
     vcr: { type: "recording" },
@@ -271,4 +263,4 @@ const main = async () => {
     push("天翼云盘自动签到任务", content);
     recording.erase();
   }
-})();    
+})();
